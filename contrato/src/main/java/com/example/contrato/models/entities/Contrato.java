@@ -2,15 +2,15 @@ package com.example.contrato.models.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
-@Table(name="contrato")
 public class Contrato {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;  
 
     @NotEmpty
     @Column(nullable = false)
@@ -20,18 +20,19 @@ public class Contrato {
     @Column(nullable = false)
     private String empresa;
 
+    @NotNull
     @Column(nullable = false)
-    private int duracionMeses;
+    private Integer duracionMeses;
 
-    @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
+    @Column(name = "fecha_inicio", nullable = false)
     private Date fechaInicio;
 
-    public Integer getId() {
+    // Getters y Setters
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -51,11 +52,11 @@ public class Contrato {
         this.empresa = empresa;
     }
 
-    public int getDuracionMeses() {
+    public Integer getDuracionMeses() {
         return duracionMeses;
     }
 
-    public void setDuracionMeses(int duracionMeses) {
+    public void setDuracionMeses(Integer duracionMeses) {
         this.duracionMeses = duracionMeses;
     }
 

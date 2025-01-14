@@ -1,5 +1,6 @@
 package com.example.contrato.services;
 
+
 import com.example.contrato.models.entities.Contrato;
 import com.example.contrato.repositories.ContratoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class ContratoServiceImpl implements ContratoService {
     }
 
     @Override
-    public Optional<Contrato> findById(Integer id) {
+    public Optional<Contrato> findById(Long id) {
         return repository.findById(id);
     }
 
@@ -30,7 +31,7 @@ public class ContratoServiceImpl implements ContratoService {
     }
 
     @Override
-    public void deleteById(Integer id) {
+    public void deleteById(Long id) {
         repository.deleteById(id);
     }
 }

@@ -20,16 +20,13 @@ public class ContratoController {
     @Autowired
     private ContratoService service;
 
-    // Crear un nuevo contrato
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody Contrato contrato, BindingResult result) {
+    public ResponseEntity<?> crear(@Valid @RequestBody Contrato contrato, BindingResult result) {
         if (result.hasErrors()) {
             Map<String, String> errores = new HashMap<>();
 
             result.getFieldErrors().forEach(
-                    err -> errores.put(
-                            err.getField(), err.getDefaultMessage()
-                    ));
+                    err -> errores.put(err.getField(), err.getDefaultMessage()));
             return ResponseEntity.badRequest().body(errores);
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(contrato));
@@ -43,7 +40,7 @@ public class ContratoController {
 
     // Buscar un contrato por su ID
     @GetMapping("/{id}")
-    public ResponseEntity<?> buscarPorId(@PathVariable Integer id) {
+    public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
         Optional<Contrato> contratoOptional = service.findById(id);
         if (contratoOptional.isPresent()) {
             return ResponseEntity.ok(contratoOptional.get());
@@ -53,14 +50,26 @@ public class ContratoController {
 
     // Modificar un contrato por su ID
     @PutMapping("/{id}")
-    public ResponseEntity<?> modificar(@RequestBody Contrato contrato, @PathVariable Integer id) {
+    public ResponseEntity<?> modificar(@Valid @RequestBody Contrato contrato, BindingResult result, @PathVariable Long id) {
+        // Validar campos vacíos o inválidos
+        if (result.hasErrors()) {
+            Map<String, String> errores = new HashMap<>();
+            result.getFieldErrors().forEach(err -> errores.put(err.getField(), err.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(errores);
+        }
+
+        // Buscar el contrato existente
         Optional<Contrato> contratoOptional = service.findById(id);
         if (contratoOptional.isPresent()) {
             Contrato contratoDB = contratoOptional.get();
+
+            // Actualizar los valores del contrato
             contratoDB.setEmpleado(contrato.getEmpleado());
             contratoDB.setEmpresa(contrato.getEmpresa());
             contratoDB.setDuracionMeses(contrato.getDuracionMeses());
             contratoDB.setFechaInicio(contrato.getFechaInicio());
+
+            // Guardar el contrato actualizado
             return ResponseEntity.status(HttpStatus.CREATED).body(service.save(contratoDB));
         }
         return ResponseEntity.notFound().build();
@@ -68,7 +77,7 @@ public class ContratoController {
 
     // Eliminar un contrato por su ID
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Integer id) {
+    public ResponseEntity<?> eliminar(@PathVariable Long id) {
         Optional<Contrato> contratoOptional = service.findById(id);
         if (contratoOptional.isPresent()) {
             service.deleteById(id);
@@ -76,5 +85,5 @@ public class ContratoController {
         }
         return ResponseEntity.notFound().build();
     }
-
 }
+

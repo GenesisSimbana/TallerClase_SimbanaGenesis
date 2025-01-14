@@ -1,14 +1,14 @@
-# Usar una imagen base de OpenJDK para Java 17
+# Usar imagen base de OpenJDK
 FROM openjdk:17-jdk-slim
 
-# Establecer el directorio de trabajo dentro del contenedor
+# Establecer directorio de trabajo
 WORKDIR /app
 
-# Copiar el archivo JAR generado por el build
-COPY target/contrato-0.0.1-SNAPSHOT.jar contrato-service.jar
+# Copiar el archivo JAR del proyecto al contenedor
+COPY target/contrato-0.0.1-SNAPSHOT.jar app.jar
 
-# Exponer el puerto que utiliza la aplicación
-EXPOSE 8004
+# Exponer el puerto 8001
+EXPOSE 8003
 
-# Comando para ejecutar la aplicación
-ENTRYPOINT ["java", "-jar", "contrato-service.jar"]
+# Ejecutar la aplicación
+CMD ["java", "-jar", "app.jar"]
